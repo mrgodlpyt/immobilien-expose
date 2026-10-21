@@ -91,6 +91,6 @@ Alternativ den gesamten Ordner auf einen beliebigen Webspace kopieren
 - `css/styles.css` – Gestaltung; Farben und Schriften oben als Variablen
 - `js/render.js` – baut Titel, Fakten, Galerie, Kontakt aus den Inhalten
 - `js/plan.js` – Grundriss, Tabs, Pins, Pin-Modus
-- `js/tour.js` – 360°-Rundgang mit [Pannellum](https://pannellum.org) (per CDN)
+- `js/tour.js` – 360°-Rundgang mit [Pannellum](https://pannellum.org), lokal unter `vendor/pannellum/` (leicht gepatcht, siehe README dort)
 - `js/lightbox.js` – Bildansicht der Galerie
 - Schriften: Fraunces, Instrument Sans, DM Mono (Google Fonts)
