@@ -15,7 +15,7 @@ window.Expose = window.Expose || {};
           <img src="${esc(img.src)}" alt="${esc(img.alt || "")}" fetchpriority="high">
           <figcaption class="caption">
             <span>${esc(img.bildunterschrift || "")}</span>
-            <span>${esc(P.objektnummer ? "Objekt-Nr. " + P.objektnummer : "")}</span>
+            <span>${esc(a.plz || "")} ${esc(a.ort || "")}</span>
           </figcaption>
         </figure>
         <div class="hero__intro">
@@ -111,44 +111,31 @@ window.Expose = window.Expose || {};
   function kontakt(P) {
     const k = P.kontakt || {}; const a = P.adresse || {};
     const tel = (k.telefon || "").replace(/[^+\d]/g, "");
-    const f = k.formular || {};
+    const betreff = encodeURIComponent("Besichtigungsanfrage " + (P.titel || "").replace(/<[^>]+>/g, ""));
     return `
       <div>
         ${k.hinweis ? `<p class="kontakt__text">${esc(k.hinweis)}</p>` : ""}
-        <section class="kontakt__card">
-          <h3>Ansprechpartner</h3>
-          <dl class="dl">
-            ${k.name ? `<div class="row"><dt>Name</dt><dd>${esc(k.name)}${k.rolle ? `, ${esc(k.rolle)}` : ""}</dd></div>` : ""}
-            ${k.telefon ? `<div class="row"><dt>Telefon</dt><dd class="v"><a href="tel:${esc(tel)}">${esc(k.telefon)}</a></dd></div>` : ""}
-            ${k.email ? `<div class="row"><dt>E-Mail</dt><dd class="v"><a href="mailto:${esc(k.email)}">${esc(k.email)}</a></dd></div>` : ""}
-            <div class="row"><dt>Objekt</dt><dd>${esc(a.strasse || "")}${a.strasse ? ", " : ""}${esc(a.plz || "")} ${esc(a.ort || "")}</dd></div>
-            ${P.objektnummer ? `<div class="row"><dt>Objekt-Nr.</dt><dd>${esc(P.objektnummer)}</dd></div>` : ""}
-          </dl>
-        </section>
-      </div>
-      <form class="form" id="anfrage" novalidate>
-        <div class="field"><label for="f-name">Name *</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
-        <div class="field"><label for="f-email">E-Mail *</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
-        <div class="field"><label for="f-tel">Telefon</label><input id="f-tel" name="telefon" type="tel" autocomplete="tel"></div>
-        <div class="field"><label for="f-termin">Wunschtermin</label><input id="f-termin" name="termin" type="text" placeholder="z. B. Samstagvormittag"></div>
-        <div class="field full"><label for="f-msg">Nachricht</label><textarea id="f-msg" name="nachricht" rows="5"></textarea></div>
-        <div class="hp" aria-hidden="true"><label>Website<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
-        <label class="form__consent full">
-          <input type="checkbox" name="einwilligung" required>
-          <span>${esc(f.einwilligungstext || "Ich bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden.")}</span>
-        </label>
-        <div class="form__footer full">
-          <button class="btn btn--primary" type="submit">Anfrage senden</button>
-          <span class="form__status" id="form-status" aria-live="polite"></span>
+        <div class="kontakt__actions">
+          ${k.email ? `<a class="btn btn--primary" href="mailto:${esc(k.email)}?subject=${betreff}">E-Mail schreiben</a>` : ""}
+          ${k.telefon ? `<a class="btn" href="tel:${esc(tel)}">Anrufen</a>` : ""}
         </div>
-      </form>`;
+      </div>
+      <section class="kontakt__card">
+        <h3>Ansprechpartner</h3>
+        <dl class="dl">
+          ${k.name ? `<div class="row"><dt>Name</dt><dd>${esc(k.name)}${k.rolle ? `, ${esc(k.rolle)}` : ""}</dd></div>` : ""}
+          ${k.telefon ? `<div class="row"><dt>Telefon</dt><dd class="v"><a href="tel:${esc(tel)}">${esc(k.telefon)}</a></dd></div>` : ""}
+          ${k.email ? `<div class="row"><dt>E-Mail</dt><dd class="v"><a href="mailto:${esc(k.email)}">${esc(k.email)}</a></dd></div>` : ""}
+          <div class="row"><dt>Objekt</dt><dd>${esc(a.strasse || "")}${a.strasse ? ", " : ""}${esc(a.plz || "")} ${esc(a.ort || "")}</dd></div>
+        </dl>
+      </section>`;
   }
 
   function footer(P) {
     const r = P.rechtliches || {};
     const year = new Date().getFullYear();
     return `
-      <span class="caption">© ${year} · ${esc(P.objektnummer || "Exposé")} · Alle Angaben ohne Gewähr</span>
+      <span class="caption">© ${year} · Alle Angaben ohne Gewähr</span>
       <nav class="caption">
         <a href="${esc(r.impressumUrl || "#")}">Impressum</a>
         <a href="${esc(r.datenschutzUrl || "#")}">Datenschutz</a>

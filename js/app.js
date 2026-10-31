@@ -8,7 +8,6 @@
   Expose.lightbox.init(P.galerie);
   Expose.plan.init(P);
   Expose.tour.init(P);
-  Expose.form.init(P);
 
   // Höhe der Kopfzeile messen (auf dem Handy zweizeilig), damit Sprungmarken
   // nicht unter der Leiste verschwinden

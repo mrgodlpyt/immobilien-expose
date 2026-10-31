@@ -16,8 +16,6 @@ window.PROPERTY = {
   // ------------------------------------------------------------------
   // 1. GRUNDDATEN
   // ------------------------------------------------------------------
-  objektnummer: "EFH-2026-01",
-
   // Wortmarke oben links (z. B. Hausname oder Anbieter) und Zusatzzeile
   marke: { name: "Haus am Musterweg", zusatz: "Verkauf von privat" },
   status: "Verfügbar",                       // z. B. "Verfügbar", "Reserviert", "Verkauft"
@@ -280,16 +278,7 @@ window.PROPERTY = {
     rolle: "Eigentümer",
     telefon: "+49 170 0000000",
     email: "verkauf@example.com",
-    hinweis: "Besichtigungen nach Terminvereinbarung, auch am Wochenende.",
-    // Anfrageformular: ohne "endpoint" öffnet sich das E-Mail-Programm mit
-    // vorbereitetem Text. Mit einem Formular-Dienst (z. B. Formspree) hier
-    // die Adresse eintragen, dann wird direkt von der Seite aus gesendet.
-    formular: {
-      endpoint: "",
-      betreff: "Besichtigungsanfrage {objekt}",
-      danke: "Vielen Dank, Ihre Anfrage ist eingegangen. Wir melden uns zeitnah.",
-      einwilligungstext: "Ich bin einverstanden, dass meine Angaben zur Beantwortung der Anfrage gespeichert und verwendet werden. Weitere Informationen in der Datenschutzerklärung."
-    }
+    hinweis: "Besichtigungen nach Terminvereinbarung, auch am Wochenende."
   },
 
   // ------------------------------------------------------------------
