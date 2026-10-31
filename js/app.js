@@ -10,6 +10,12 @@
   Expose.tour.init(P);
   Expose.form.init(P);
 
+  // Höhe der Kopfzeile messen (auf dem Handy zweizeilig), damit Sprungmarken
+  // nicht unter der Leiste verschwinden
+  const header = $("#topbar");
+  const setHeaderH = () => document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+  window.addEventListener("resize", setHeaderH); setHeaderH();
+
   // Aktiver Abschnitt in der Navigation: der letzte Abschnitt, dessen
   // Oberkante über 40 % der Fensterhöhe liegt
   const links = $$(".menu a");
