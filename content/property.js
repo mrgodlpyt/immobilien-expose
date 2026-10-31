@@ -192,7 +192,7 @@ window.PROPERTY = {
     wohnzimmer: {
       titel: "Wohnzimmer",
       bild: "assets/panoramas/wohnzimmer.webp",
-      yaw: 0, pitch: 0, hfov: 100,
+      yaw: 0, pitch: 0, hfov: 110,
       verbindungen: [
         { ziel: "essbereich", yaw: 95, pitch: -8, text: "Zum Essbereich" },
         { ziel: "flur",       yaw: -150, pitch: -8, text: "Zum Flur" }
@@ -201,7 +201,7 @@ window.PROPERTY = {
     essbereich: {
       titel: "Essbereich & Küche",
       bild: "assets/panoramas/essbereich.webp",
-      yaw: 10, pitch: 0, hfov: 100,
+      yaw: 10, pitch: 0, hfov: 110,
       verbindungen: [
         { ziel: "wohnzimmer",  yaw: -100, pitch: -8, text: "Zum Wohnzimmer" },
         { ziel: "schlafzimmer", yaw: 135, pitch: -5, text: "Nach oben ins Schlafzimmer" }
@@ -211,7 +211,7 @@ window.PROPERTY = {
     flur: {
       titel: "Flur und Treppe",
       bild: "assets/panoramas/flur-treppenhaus.jpg",
-      yaw: -20, pitch: 0, hfov: 95,
+      yaw: -20, pitch: 0, hfov: 118,
       verbindungen: [
         { ziel: "wohnzimmer", yaw: 140, pitch: -10, text: "Zum Wohnzimmer" }
       ]
@@ -219,7 +219,7 @@ window.PROPERTY = {
     schlafzimmer: {
       titel: "Schlafzimmer",
       bild: "assets/panoramas/schlafzimmer.webp",
-      yaw: 0, pitch: 0, hfov: 100,
+      yaw: 0, pitch: 0, hfov: 110,
       verbindungen: [
         { ziel: "wohnzimmer", yaw: -120, pitch: -10, text: "Zurück nach unten" }
       ]
