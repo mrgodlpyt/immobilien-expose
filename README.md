@@ -93,4 +93,5 @@ Alternativ den gesamten Ordner auf einen beliebigen Webspace kopieren
 - `js/plan.js` – Grundriss, Tabs, Pins, Pin-Modus
 - `js/tour.js` – 360°-Rundgang mit [Pannellum](https://pannellum.org), lokal unter `vendor/pannellum/` (leicht gepatcht, siehe README dort)
 - `js/lightbox.js` – Bildansicht der Galerie
-- Schriften: Fraunces, Instrument Sans, DM Mono (Google Fonts)
+- Schrift: Systemschrift des Geräts (SF Pro auf Apple-Geräten, Segoe UI/Roboto sonst) – keine externen Font-Anfragen
+- Gestaltung: angelehnt an Apples Human Interface Guidelines (Hierarchie, gruppierte Listen, 44-px-Bedienflächen, Kontrast, Dark Mode)

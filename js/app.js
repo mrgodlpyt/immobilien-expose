@@ -29,9 +29,4 @@
   window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(updateNav); } }, { passive: true });
   updateNav();
 
-  // Sanftes Einblenden beim Scrollen
-  const revObs = new IntersectionObserver(entries => {
-    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("is-in"); revObs.unobserve(en.target); } });
-  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
-  $$(".reveal").forEach(el => revObs.observe(el));
 })();

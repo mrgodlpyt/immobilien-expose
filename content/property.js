@@ -19,8 +19,7 @@ window.PROPERTY = {
   objektnummer: "EFH-2026-01",
   status: "Verfügbar",                       // z. B. "Verfügbar", "Reserviert", "Verkauft"
 
-  // Überschrift: <em>…</em> setzt ein Wort kursiv in der Akzentfarbe.
-  titel: "Freistehendes Einfamilienhaus mit <em>Garten</em> und Garage",
+  titel: "Freistehendes Einfamilienhaus mit Garten und Garage",
   untertitel:
     "Zwei Etagen, 142 m² Wohnfläche und ein 520 m² großes Grundstück " +
     "in ruhiger Wohnlage – bezugsfrei nach Vereinbarung.",
@@ -142,7 +141,9 @@ window.PROPERTY = {
     { src: "assets/images/06-schlafen.jpg",        titel: "Schlafzimmer" },
     { src: "assets/images/07-bad.jpg",             titel: "Bad mit Dusche" },
     { src: "assets/images/08-arbeiten.jpg",        titel: "Arbeitszimmer" },
-    { src: "assets/images/09-flur.jpg",            titel: "Flur und Treppe" }
+    { src: "assets/images/09-flur.jpg",            titel: "Flur und Treppe" },
+    // Erstes Originalfoto vom Objekt (Insta360 X4 Air, Testaufnahme)
+    { src: "assets/images/10-flur-original.jpg",   titel: "Flur mit Treppenaufgang (Originalfoto)" }
   ],
 
   // ------------------------------------------------------------------
@@ -162,7 +163,8 @@ window.PROPERTY = {
       bild: "assets/floorplans/erdgeschoss.jpg",
       pins: [
         { label: "Wohn- und Essbereich", x: 33, y: 32, szene: "wohnzimmer", blickrichtung: 0 },
-        { label: "Küche",                x: 74, y: 30, szene: "essbereich", blickrichtung: 270 }
+        { label: "Küche",                x: 76, y: 32, szene: "essbereich", blickrichtung: 270 },
+        { label: "Flur und Treppe",      x: 44, y: 70, szene: "flur",       blickrichtung: 180 }
       ]
     },
     {
@@ -189,7 +191,8 @@ window.PROPERTY = {
       bild: "assets/panoramas/wohnzimmer.webp",
       yaw: 0, pitch: 0, hfov: 100,
       verbindungen: [
-        { ziel: "essbereich", yaw: 95, pitch: -8, text: "Zum Essbereich" }
+        { ziel: "essbereich", yaw: 95, pitch: -8, text: "Zum Essbereich" },
+        { ziel: "flur",       yaw: -150, pitch: -8, text: "Zum Flur" }
       ]
     },
     essbereich: {
@@ -199,6 +202,15 @@ window.PROPERTY = {
       verbindungen: [
         { ziel: "wohnzimmer",  yaw: -100, pitch: -8, text: "Zum Wohnzimmer" },
         { ziel: "schlafzimmer", yaw: 135, pitch: -5, text: "Nach oben ins Schlafzimmer" }
+      ]
+    },
+    // Erstes echtes 360°-Bild vom Objekt (Insta360, 6144 × 3072, aufgehellt)
+    flur: {
+      titel: "Flur und Treppe",
+      bild: "assets/panoramas/flur-treppenhaus.jpg",
+      yaw: -20, pitch: 0, hfov: 95,
+      verbindungen: [
+        { ziel: "wohnzimmer", yaw: 140, pitch: -10, text: "Zum Wohnzimmer" }
       ]
     },
     schlafzimmer: {

@@ -2,13 +2,11 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
   <title>Exposé</title>
   <meta name="description" content="Exposé mit Bildern, Grundriss und 360°-Rundgang.">
   <meta name="robots" content="noindex">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Instrument+Sans:wght@400..700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="vendor/pannellum/pannellum.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -18,10 +16,10 @@
   <header class="topbar" id="topbar">
     <a class="topbar__brand" href="#top" id="topbar-brand">Exposé</a>
     <nav class="topbar__nav" aria-label="Abschnitte">
-      <a href="#objekt"><span class="n">01</span>Objekt</a>
-      <a href="#bilder"><span class="n">02</span>Bilder</a>
-      <a href="#grundriss"><span class="n">03</span>Grundriss &amp; 360°</a>
-      <a href="#kontakt"><span class="n">04</span>Kontakt</a>
+      <a href="#objekt">Objekt</a>
+      <a href="#bilder">Bilder</a>
+      <a href="#grundriss">Grundriss &amp; 360°</a>
+      <a href="#kontakt">Kontakt</a>
     </nav>
     <a class="btn btn--small topbar__cta" href="#kontakt">Anfragen</a>
   </header>
@@ -33,8 +31,7 @@
     <!-- 01 Objekt: Beschreibung + Fakten -->
     <section class="section" id="objekt">
       <div class="wrap">
-        <header class="section__head reveal">
-          <span class="section__num" aria-hidden="true">01</span>
+        <header class="section__head">
           <div>
             <h2 class="section__title">Das Objekt</h2>
             <p class="section__lead">Alle Eckdaten auf einen Blick – von der Wohnfläche bis zur Heizung.</p>
@@ -47,8 +44,7 @@
     <!-- 02 Bilder -->
     <section class="section" id="bilder">
       <div class="wrap">
-        <header class="section__head reveal">
-          <span class="section__num" aria-hidden="true">02</span>
+        <header class="section__head">
           <div>
             <h2 class="section__title">Bilder</h2>
             <p class="section__lead">Zum Vergrößern anklicken, mit den Pfeiltasten blättern.</p>
@@ -61,27 +57,25 @@
     <!-- 03 Grundriss & 360° -->
     <section class="section" id="grundriss">
       <div class="wrap">
-        <header class="section__head reveal">
-          <span class="section__num" aria-hidden="true">03</span>
+        <header class="section__head">
           <div>
             <h2 class="section__title">Grundriss &amp; 360°-Rundgang</h2>
-            <p class="section__lead">Die roten Punkte im Plan öffnen den jeweiligen Raum als Rundumblick. Im Rundgang führen Pfeile von Raum zu Raum.</p>
+            <p class="section__lead">Die nummerierten Punkte im Plan öffnen den jeweiligen Raum als Rundumblick. Im Rundgang führen Pfeile von Raum zu Raum.</p>
           </div>
         </header>
-        <div class="plan reveal" id="plan"></div>
+        <div class="plan" id="plan"></div>
       </div>
     </section>
 
     <!-- 04 Kontakt -->
     <section class="section section--last" id="kontakt">
       <div class="wrap">
-        <header class="section__head reveal">
-          <span class="section__num" aria-hidden="true">04</span>
+        <header class="section__head">
           <div>
             <h2 class="section__title">Kontakt</h2>
           </div>
         </header>
-        <div class="kontakt reveal" id="kontakt-body"></div>
+        <div class="kontakt" id="kontakt-body"></div>
       </div>
     </section>
   </main>
@@ -93,7 +87,7 @@
   <!-- Lightbox für die Galerie -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildansicht" hidden>
     <div class="lightbox__top">
-      <span class="mono" id="lightbox-counter">1 / 1</span>
+      <span class="caption" id="lightbox-counter">1 / 1</span>
       <button class="iconbtn" id="lightbox-close" aria-label="Schließen">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l14 14M16 2L2 16"/></svg>
       </button>
@@ -107,7 +101,7 @@
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2l7 7-7 7"/></svg>
       </button>
     </div>
-    <div class="lightbox__cap mono">
+    <div class="lightbox__cap caption">
       <span id="lightbox-caption"></span>
       <span>Esc zum Schließen</span>
     </div>
@@ -118,7 +112,7 @@
     <div class="tour__pano" id="tour-pano"></div>
     <div class="tour__bar">
       <div class="tour__title">
-        <span class="k mono">360°-Rundgang</span>
+        <span class="k caption">360°-Rundgang</span>
         <span class="v" id="tour-title">–</span>
       </div>
       <button class="iconbtn iconbtn--light" id="tour-close" aria-label="Rundgang schließen">
@@ -126,14 +120,14 @@
       </button>
     </div>
     <aside class="tour__map" id="tour-map" aria-label="Position im Grundriss">
-      <div class="tour__map-head mono"><span id="tour-map-floor">Erdgeschoss</span><span>Position</span></div>
+      <div class="tour__map-head caption"><span id="tour-map-floor">Erdgeschoss</span><span>Position</span></div>
       <div class="tour__map-canvas" id="tour-map-canvas"></div>
     </aside>
     <nav class="tour__scenes" id="tour-scenes" aria-label="Räume"></nav>
-    <p class="tour__hint mono" id="tour-hint">Ziehen zum Umsehen · Scrollen zum Zoomen · Pfeile führen in den nächsten Raum</p>
+    <p class="tour__hint caption" id="tour-hint">Ziehen zum Umsehen · Scrollen zum Zoomen · Pfeile führen in den nächsten Raum</p>
   </div>
 
-  <div class="toast mono" id="toast" hidden></div>
+  <div class="toast caption" id="toast" hidden></div>
 
   <script src="vendor/pannellum/libpannellum.js"></script>
   <script src="vendor/pannellum/pannellum.js"></script>
