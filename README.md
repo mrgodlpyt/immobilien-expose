@@ -29,7 +29,10 @@ daraus auf – es reicht, die Datei zu speichern und die Seite neu zu laden.
 | `grundrisse` | Etagen mit Plan-Bild und 360°-Punkten (`pins`) |
 | `szenen` | 360°-Bilder und die Pfeile (`verbindungen`) zwischen ihnen |
 | `rundgang` | Start-Szene, automatische Drehung |
-| `kontakt`, `rechtliches` | Kontaktblock und Fußzeile |
+| `energie` | Energieausweis-Block unter den Daten |
+| `lage` | Lagetext, Entfernungen, optional Karte (OpenStreetMap) |
+| `kontakt`, `rechtliches` | Ansprechpartner, Anfrageformular, Fußzeile |
+| `marke` | Wortmarke oben links |
 
 ## Bilder
 
@@ -77,6 +80,14 @@ ist danach unter `https://<benutzer>.github.io/<repo>/` erreichbar.
 Alternativ den gesamten Ordner auf einen beliebigen Webspace kopieren
 (Netlify, Vercel, Hoster per FTP) – es sind nur statische Dateien.
 
+## Anfrageformular
+
+Ohne weitere Einrichtung öffnet „Anfrage senden“ das E-Mail-Programm des
+Besuchers mit vorbereitetem Text an die Adresse aus `kontakt.email`. Soll
+die Anfrage direkt von der Seite verschickt werden, bei einem Formular-Dienst
+(z. B. Formspree) ein Formular anlegen und dessen Adresse unter
+`kontakt.formular.endpoint` eintragen.
+
 ## Vor der Veröffentlichung
 
 - Impressum und Datenschutzerklärung verlinken (`rechtliches` in
@@ -93,5 +104,6 @@ Alternativ den gesamten Ordner auf einen beliebigen Webspace kopieren
 - `js/plan.js` – Grundriss, Tabs, Pins, Pin-Modus
 - `js/tour.js` – 360°-Rundgang mit [Pannellum](https://pannellum.org), lokal unter `vendor/pannellum/` (leicht gepatcht, siehe README dort)
 - `js/lightbox.js` – Bildansicht der Galerie
-- Schrift: Systemschrift des Geräts (SF Pro auf Apple-Geräten, Segoe UI/Roboto sonst) – keine externen Font-Anfragen
-- Gestaltung: angelehnt an Apples Human Interface Guidelines (Hierarchie, gruppierte Listen, 44-px-Bedienflächen, Kontrast, Dark Mode)
+- `js/form.js` – Anfrageformular (E-Mail-Programm oder Formular-Dienst, siehe `kontakt.formular`)
+- Schriften: Playfair Display und Inter, lokal in `assets/fonts/` (keine Anfrage an Google Fonts)
+- Gestaltung: klassisches Makler-Exposé – Weiß/Creme, Anthrazit, Dunkelblau, feine Linien, keine Schatten oder Animationen

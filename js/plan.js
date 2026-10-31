@@ -29,12 +29,12 @@ window.Expose = window.Expose || {};
     root.innerHTML = `
       <div class="plan__left">
         ${floors.length > 1 ? `
-        <div class="segmented" role="tablist">
-          ${floors.map(f => `<button class="segmented__btn ${f.id === activeFloor.id ? "is-active" : ""}" role="tab"
+        <div class="plan__tabs" role="tablist">
+          ${floors.map(f => `<button class="plan__tab ${f.id === activeFloor.id ? "is-active" : ""}" role="tab"
               aria-selected="${f.id === activeFloor.id}" data-floor="${esc(f.id)}">${esc(f.name)}</button>`).join("")}
         </div>` : ""}
         <div class="plan__stage">
-          ${floors.length > 1 ? "" : ""}<div class="plan__canvas ${picking ? "is-picking" : ""}" id="plan-canvas">
+          <div class="plan__canvas ${picking ? "is-picking" : ""}" id="plan-canvas">
             <img src="${esc(activeFloor.bild)}" alt="Grundriss ${esc(activeFloor.name)}">
             ${pinsHTML(activeFloor)}
           </div>
@@ -44,26 +44,23 @@ window.Expose = window.Expose || {};
           : "Nummerierte Punkte öffnen den 360°-Blick in diesem Raum"}</p>
       </div>
       <div class="plan__right">
-        <div class="group">
-          <h3 class="group__header">${esc(activeFloor.name)} · ${activeFloor.pins.length} ${activeFloor.pins.length === 1 ? "Rundumblick" : "Rundumblicke"}</h3>
-          <ol class="rooms group__body">
-            ${(activeFloor.pins || []).map((p, i) => `
-              <li><button type="button" data-scene="${esc(p.szene)}">
-                <span class="num">${i + 1}</span>
-                <span class="name">${esc(p.label)}</span>
-                <span class="badge">360°</span>
-                <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
-              </button></li>`).join("")}
-          </ol>
-        </div>
+        <p class="rooms__floor eyebrow">${esc(activeFloor.name)} · ${activeFloor.pins.length} ${activeFloor.pins.length === 1 ? "Rundumblick" : "Rundumblicke"}</p>
+        <ol class="rooms">
+          ${(activeFloor.pins || []).map((p, i) => `
+            <li><button type="button" data-scene="${esc(p.szene)}">
+              <span class="num">${i + 1}</span>
+              <span class="name">${esc(p.label)}</span>
+              <span class="badge">360° ansehen</span>
+            </button></li>`).join("")}
+        </ol>
         <div class="plan__cta">
           <p>Oder den kompletten Rundgang starten und sich mit den Pfeilen von Raum zu Raum bewegen.</p>
-          <div><button class="btn btn--primary" type="button" data-open-tour>Rundgang starten</button></div>
+          <div><button class="btn" type="button" data-open-tour>Rundgang starten</button></div>
         </div>
       </div>`;
 
     // Tabs
-    $$(".segmented__btn", root).forEach(b => b.addEventListener("click", () => {
+    $$(".plan__tab", root).forEach(b => b.addEventListener("click", () => {
       activeFloor = floors.find(f => f.id === b.dataset.floor); render();
     }));
 

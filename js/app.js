@@ -8,15 +8,11 @@
   Expose.lightbox.init(P.galerie);
   Expose.plan.init(P);
   Expose.tour.init(P);
-
-  // Kopfzeile bekommt beim Scrollen einen Hintergrund
-  const topbar = $("#topbar");
-  const onScroll = () => topbar.classList.toggle("is-scrolled", window.scrollY > 24);
-  window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  Expose.form.init(P);
 
   // Aktiver Abschnitt in der Navigation: der letzte Abschnitt, dessen
   // Oberkante über 40 % der Fensterhöhe liegt
-  const links = $$(".topbar__nav a");
+  const links = $$(".menu a");
   const sections = $$("main .section");
   let ticking = false;
   function updateNav() {

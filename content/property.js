@@ -17,6 +17,9 @@ window.PROPERTY = {
   // 1. GRUNDDATEN
   // ------------------------------------------------------------------
   objektnummer: "EFH-2026-01",
+
+  // Wortmarke oben links (z. B. Hausname oder Anbieter) und Zusatzzeile
+  marke: { name: "Haus am Musterweg", zusatz: "Verkauf von privat" },
   status: "Verfügbar",                       // z. B. "Verfügbar", "Reserviert", "Verkauft"
 
   titel: "Freistehendes Einfamilienhaus mit Garten und Garage",
@@ -223,6 +226,47 @@ window.PROPERTY = {
     }
   },
 
+  // ------------------------------------------------------------------
+  // 6b. ENERGIEAUSWEIS  (eigener Block unter den Daten; Pflichtangaben)
+  // ------------------------------------------------------------------
+  energie: {
+    titel: "Energieausweis",
+    eintraege: [
+      { label: "Art des Ausweises",       wert: "Bedarfsausweis" },
+      { label: "Endenergiebedarf",        wert: "wird nachgereicht" },
+      { label: "Energieeffizienzklasse",  wert: "wird nachgereicht" },
+      { label: "Wesentlicher Energieträger", wert: "Gas" },
+      { label: "Baujahr Heizung",         wert: "2018" },
+      { label: "Ausstellungsdatum",       wert: "wird nachgereicht" }
+    ],
+    hinweis: "Die Angaben aus dem Energieausweis werden vor Veröffentlichung ergänzt."
+  },
+
+  // ------------------------------------------------------------------
+  // 6c. LAGE  (Text, Entfernungen, optional Karte)
+  //     karte: { lat, lon, zoom, einbetten } – einbetten: true zeigt eine
+  //     OpenStreetMap-Karte direkt auf der Seite, false nur einen Link.
+  //     karte: null blendet beides aus.
+  // ------------------------------------------------------------------
+  lage: {
+    text: [
+      "Das Haus liegt in einer ruhigen Wohnstraße der Südstadt, umgeben von Einfamilienhäusern " +
+      "und gewachsenen Gärten. Die Straße ist verkehrsberuhigt, Durchgangsverkehr gibt es nicht.",
+      "Einkaufsmöglichkeiten des täglichen Bedarfs, Grundschule und Kita sind in wenigen Minuten " +
+      "zu Fuß erreichbar. Die Innenstadt liegt etwa zehn Minuten mit dem Rad oder Bus entfernt, " +
+      "die Autobahnanschlussstelle erreichen Sie in rund acht Minuten."
+    ],
+    entfernungen: [
+      { label: "Supermarkt",      wert: "450 m" },
+      { label: "Grundschule",     wert: "600 m" },
+      { label: "Kita",            wert: "350 m" },
+      { label: "Bushaltestelle",  wert: "200 m" },
+      { label: "Bahnhof",         wert: "2,5 km" },
+      { label: "Autobahn A 7",    wert: "6 km" }
+    ],
+    karte: null   // z. B. { lat: 52.5200, lon: 13.4050, zoom: 16, einbetten: false }
+  },
+
   rundgang: {
     start: "wohnzimmer",   // Szene, mit der "Rundgang starten" beginnt
     autoRotate: -2         // Langsame Drehung bis zur ersten Interaktion; 0 = aus
@@ -236,7 +280,16 @@ window.PROPERTY = {
     rolle: "Eigentümer",
     telefon: "+49 170 0000000",
     email: "verkauf@example.com",
-    hinweis: "Besichtigungen nach Terminvereinbarung, auch am Wochenende."
+    hinweis: "Besichtigungen nach Terminvereinbarung, auch am Wochenende.",
+    // Anfrageformular: ohne "endpoint" öffnet sich das E-Mail-Programm mit
+    // vorbereitetem Text. Mit einem Formular-Dienst (z. B. Formspree) hier
+    // die Adresse eintragen, dann wird direkt von der Seite aus gesendet.
+    formular: {
+      endpoint: "",
+      betreff: "Besichtigungsanfrage {objekt}",
+      danke: "Vielen Dank, Ihre Anfrage ist eingegangen. Wir melden uns zeitnah.",
+      einwilligungstext: "Ich bin einverstanden, dass meine Angaben zur Beantwortung der Anfrage gespeichert und verwendet werden. Weitere Informationen in der Datenschutzerklärung."
+    }
   },
 
   // ------------------------------------------------------------------

@@ -3,77 +3,90 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="color-scheme" content="light dark">
   <title>Exposé</title>
   <meta name="description" content="Exposé mit Bildern, Grundriss und 360°-Rundgang.">
   <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="vendor/pannellum/pannellum.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-  <!-- Kopfzeile -->
-  <header class="topbar" id="topbar">
-    <a class="topbar__brand" href="#top" id="topbar-brand">Exposé</a>
-    <nav class="topbar__nav" aria-label="Abschnitte">
-      <a href="#objekt">Objekt</a>
-      <a href="#bilder">Bilder</a>
-      <a href="#grundriss">Grundriss &amp; 360°</a>
-      <a href="#kontakt">Kontakt</a>
-    </nav>
-    <a class="btn btn--small topbar__cta" href="#kontakt">Anfragen</a>
+  <!-- Kopfzeile: Wortmarke links, Menü rechts -->
+  <header class="site-header" id="topbar">
+    <div class="wrap site-header__row">
+      <a class="brand" href="#top" id="brand">
+        <span class="brand__name" id="brand-name">Exposé</span>
+        <span class="brand__sub" id="brand-sub"></span>
+      </a>
+      <nav class="menu" aria-label="Abschnitte">
+        <a href="#objekt">Objekt</a>
+        <a href="#bilder">Bilder</a>
+        <a href="#grundriss">Grundriss &amp; 360°</a>
+        <a href="#lage">Lage</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+      <a class="btn btn--small menu__cta" href="#kontakt">Besichtigung anfragen</a>
+    </div>
   </header>
 
   <main id="top">
     <!-- Titelbereich -->
     <section class="hero" id="hero"></section>
 
-    <!-- 01 Objekt: Beschreibung + Fakten -->
+    <!-- Objekt: Beschreibung, Daten, Energie -->
     <section class="section" id="objekt">
       <div class="wrap">
         <header class="section__head">
-          <div>
-            <h2 class="section__title">Das Objekt</h2>
-            <p class="section__lead">Alle Eckdaten auf einen Blick – von der Wohnfläche bis zur Heizung.</p>
-          </div>
+          <p class="eyebrow">Das Objekt</p>
+          <h2 class="section__title">Beschreibung und Daten</h2>
         </header>
         <div class="objekt" id="objekt-body"></div>
+        <div id="energie"></div>
       </div>
     </section>
 
-    <!-- 02 Bilder -->
+    <!-- Bilder -->
     <section class="section" id="bilder">
       <div class="wrap">
         <header class="section__head">
-          <div>
-            <h2 class="section__title">Bilder</h2>
-            <p class="section__lead">Zum Vergrößern anklicken, mit den Pfeiltasten blättern.</p>
-          </div>
+          <p class="eyebrow">Impressionen</p>
+          <h2 class="section__title">Bilder</h2>
+          <p class="section__lead">Zum Vergrößern anklicken, mit den Pfeiltasten blättern.</p>
         </header>
         <div class="gallery" id="gallery"></div>
       </div>
     </section>
 
-    <!-- 03 Grundriss & 360° -->
+    <!-- Grundriss & 360° -->
     <section class="section" id="grundriss">
       <div class="wrap">
         <header class="section__head">
-          <div>
-            <h2 class="section__title">Grundriss &amp; 360°-Rundgang</h2>
-            <p class="section__lead">Die nummerierten Punkte im Plan öffnen den jeweiligen Raum als Rundumblick. Im Rundgang führen Pfeile von Raum zu Raum.</p>
-          </div>
+          <p class="eyebrow">Grundriss</p>
+          <h2 class="section__title">Grundriss und 360°-Rundgang</h2>
+          <p class="section__lead">Die nummerierten Punkte im Plan öffnen den jeweiligen Raum als Rundumblick. Im Rundgang führen Pfeile von Raum zu Raum.</p>
         </header>
         <div class="plan" id="plan"></div>
       </div>
     </section>
 
-    <!-- 04 Kontakt -->
+    <!-- Lage -->
+    <section class="section" id="lage">
+      <div class="wrap">
+        <header class="section__head">
+          <p class="eyebrow">Lage</p>
+          <h2 class="section__title">Lage und Umgebung</h2>
+        </header>
+        <div class="lage" id="lage-body"></div>
+      </div>
+    </section>
+
+    <!-- Kontakt -->
     <section class="section section--last" id="kontakt">
       <div class="wrap">
         <header class="section__head">
-          <div>
-            <h2 class="section__title">Kontakt</h2>
-          </div>
+          <p class="eyebrow">Kontakt</p>
+          <h2 class="section__title">Besichtigung anfragen</h2>
         </header>
         <div class="kontakt" id="kontakt-body"></div>
       </div>
@@ -135,6 +148,7 @@
   <script src="js/util.js"></script>
   <script src="js/render.js"></script>
   <script src="js/lightbox.js"></script>
+  <script src="js/form.js"></script>
   <script src="js/plan.js"></script>
   <script src="js/tour.js"></script>
   <script src="js/app.js"></script>

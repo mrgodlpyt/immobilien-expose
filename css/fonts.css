@@ -1,0 +1,23 @@
+/* Lokal gehostete Schriften (SIL Open Font License), latin-Subset, variable Dateien.
+   Lizenzhinweise: assets/fonts/LICENSE.md */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('../assets/fonts/Inter-variable.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('../assets/fonts/PlayfairDisplay-variable.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/PlayfairDisplay-italic.woff2') format('woff2');
+}
