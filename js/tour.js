@@ -5,7 +5,7 @@
 window.Expose = window.Expose || {};
 
 (function () {
-  const { $, $$, esc, floorOfScene, orderedScenes } = Expose.util;
+  const { $, $$, esc, floorOfScene, floorGroupOfScene, orderedScenes } = Expose.util;
   let P, overlay, viewer = null, current = null, raf = null, lastFocus = null, hintTimer = null;
   let mapFloorId = null;
 
@@ -15,6 +15,7 @@ window.Expose = window.Expose || {};
       scenes[id] = {
         type: "equirectangular",
         panorama: s.bild,
+        preview: s.vorschau || undefined,
         yaw: s.yaw || 0,
         pitch: s.pitch || 0,
         hfov: s.hfov || 100,
@@ -81,9 +82,15 @@ window.Expose = window.Expose || {};
 
   function renderChips(sceneId) {
     const nav = $("#tour-scenes");
-    nav.innerHTML = orderedScenes(P).map(id => `
-      <button class="chip ${id === sceneId ? "is-active" : ""}" type="button" data-scene="${esc(id)}">${esc(P.szenen[id].titel || id)}</button>`).join("");
+    nav.innerHTML = orderedScenes(P).map(id => {
+      const f = floorGroupOfScene(P, id);
+      const k = f ? (f.kurz || f.name) : "";
+      return `<button class="chip ${id === sceneId ? "is-active" : ""}" type="button" data-scene="${esc(id)}">
+        ${k ? `<span class="chip__k">${esc(k)}</span>` : ""}${esc(P.szenen[id].titel || id)}</button>`;
+    }).join("");
     $$(".chip", nav).forEach(b => b.addEventListener("click", () => go(b.dataset.scene)));
+    const active = $(".chip.is-active", nav);
+    if (active && active.scrollIntoView) active.scrollIntoView({ block: "nearest", inline: "center" });
   }
 
   function setScene(id) {

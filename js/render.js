@@ -26,10 +26,10 @@ window.Expose = window.Expose || {};
             ${P.untertitel ? `<p class="hero__sub">${esc(P.untertitel)}</p>` : ""}
           </div>
           <aside class="hero__aside">
-            ${pr.betrag != null ? `
+            ${(pr.betrag != null || pr.text) ? `
             <div class="hero__price">
               <span class="eyebrow">Kaufpreis</span>
-              <span class="value">${esc(euro(pr.betrag))}</span>
+              <span class="value">${pr.betrag != null ? esc(euro(pr.betrag)) : esc(pr.text)}</span>
               ${pr.hinweis ? `<span class="note">${esc(pr.hinweis)}</span>` : ""}
             </div>` : ""}
             <div class="hero__actions">
@@ -81,7 +81,7 @@ window.Expose = window.Expose || {};
       <figure class="${g.format === "breit" ? "is-breit" : ""}"
               data-index="${i}" tabindex="0" role="button"
               aria-label="Bild ${i + 1} vergrößern: ${esc(g.titel || "")}">
-        <div class="img"><img src="${esc(g.src)}" alt="${esc(g.titel || "")}" loading="lazy"></div>
+        <div class="img"><img src="${esc(g.klein || g.src)}" alt="${esc(g.titel || "")}" loading="lazy" decoding="async"></div>
         <figcaption class="caption"><span class="n">${pad(i + 1)}</span><span>${esc(g.titel || "")}</span></figcaption>
       </figure>`).join("");
   }

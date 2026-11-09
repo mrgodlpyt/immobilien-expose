@@ -53,6 +53,16 @@ window.Expose = window.Expose || {};
               <span class="badge">360° ansehen</span>
             </button></li>`).join("")}
         </ol>
+        ${(activeFloor.weitere || []).length ? `
+        <p class="rooms__floor eyebrow rooms__floor--more">Ohne Punkt im Plan</p>
+        <ol class="rooms rooms--more">
+          ${activeFloor.weitere.filter(id => P.szenen[id]).map(id => `
+            <li><button type="button" data-scene="${esc(id)}">
+              <span class="num num--dot"></span>
+              <span class="name">${esc(P.szenen[id].titel || id)}</span>
+              <span class="badge">360° ansehen</span>
+            </button></li>`).join("")}
+        </ol>` : ""}
         <div class="plan__cta">
           <p>Oder den kompletten Rundgang starten und sich mit den Pfeilen von Raum zu Raum bewegen.</p>
           <div><button class="btn" type="button" data-open-tour>Rundgang starten</button></div>

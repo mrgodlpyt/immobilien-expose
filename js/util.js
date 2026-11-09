@@ -32,13 +32,22 @@ Expose.util = {
     }
     return null;
   },
-  // Alle Szenen in der Reihenfolge der Grundriss-Pins, danach die übrigen
+  // Etage, zu der eine Szene gehört (Pin oder Eintrag unter "weitere")
+  floorGroupOfScene(P, sceneId) {
+    for (const f of P.grundrisse || []) {
+      if ((f.pins || []).some(p => p.szene === sceneId) || (f.weitere || []).includes(sceneId)) return f;
+    }
+    return null;
+  },
+  // Alle Szenen in der Reihenfolge der Grundrisse (Pins, dann "weitere"), danach die übrigen
   orderedScenes(P) {
     const seen = new Set(); const out = [];
-    for (const f of P.grundrisse || []) for (const p of f.pins || []) {
-      if (P.szenen[p.szene] && !seen.has(p.szene)) { seen.add(p.szene); out.push(p.szene); }
+    const add = id => { if (P.szenen[id] && !seen.has(id)) { seen.add(id); out.push(id); } };
+    for (const f of P.grundrisse || []) {
+      for (const p of f.pins || []) add(p.szene);
+      for (const id of f.weitere || []) add(id);
     }
-    for (const id of Object.keys(P.szenen || {})) if (!seen.has(id)) out.push(id);
+    for (const id of Object.keys(P.szenen || {})) add(id);
     return out;
   }
 };

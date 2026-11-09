@@ -233,6 +233,8 @@ h1, h2 { color: var(--accent); }
 .rooms .name { font-size: 16px; }
 .rooms .badge { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-2); }
 .rooms__floor { margin-bottom: 12px; }
+.rooms__floor--more { margin-top: 28px; }
+.rooms .num--dot { background: transparent; border: 1px solid var(--accent); }
 .plan__cta { margin-top: 24px; display: grid; gap: 14px; }
 .plan__cta p { font-size: 14px; color: var(--text-2); max-width: 44ch; }
 
@@ -322,14 +324,19 @@ h1, h2 { color: var(--accent); }
 
 .tour__scenes {
   position: absolute; right: var(--gutter); bottom: 24px; z-index: 3;
-  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; max-width: 50vw;
+  display: flex; flex-wrap: nowrap; gap: 8px; max-width: min(60vw, 760px);
+  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px;
 }
+.tour__scenes::-webkit-scrollbar { display: none; }
 .chip {
   min-height: 40px; padding: 0 14px; border-radius: var(--radius);
   border: 1px solid rgba(255, 255, 255, .55); color: #fff; background: rgba(0, 0, 0, .35);
   font-size: 13px; font-weight: 500; letter-spacing: .02em;
   transition: background-color .15s ease, border-color .15s ease;
 }
+.chip { flex: none; display: inline-flex; align-items: center; gap: 8px; }
+.chip__k { font-size: 11px; letter-spacing: .1em; opacity: .7; }
+.chip.is-active .chip__k { opacity: .6; }
 .chip:hover { border-color: #fff; }
 .chip.is-active { background: #fff; color: var(--text); border-color: #fff; }
 .tour__hint {
@@ -409,6 +416,7 @@ h1, h2 { color: var(--accent); }
   .tour__map .pin__dot { width: 16px; height: 16px; font-size: 9px; }
   .cone { width: 44px; height: 44px; }
   .tour__scenes { right: 12px; bottom: 16px; max-width: calc(100vw - 185px); gap: 6px; }
+  .chip__k { display: none; }
   .chip { padding: 0 10px; font-size: 12px; min-height: 36px; }
   .tour__hint { display: none; }
   .tour__bar { padding: 12px 16px; }

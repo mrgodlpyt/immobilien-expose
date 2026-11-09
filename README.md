@@ -25,9 +25,9 @@ daraus auf – es reicht, die Datei zu speichern und die Seite neu zu laden.
 | `kennzahlen` | die vier großen Zahlen unter dem Titelbild |
 | `beschreibung` | Fließtext (erster Absatz wird groß gesetzt) |
 | `fakten` | Daten-Tabellen, beliebig viele Gruppen |
-| `galerie` | Bilder mit Bildunterschrift, `format: "breit"` für ein großes Bild |
-| `grundrisse` | Etagen mit Plan-Bild und 360°-Punkten (`pins`) |
-| `szenen` | 360°-Bilder und die Pfeile (`verbindungen`) zwischen ihnen |
+| `galerie` | Bilder mit Bildunterschrift; `klein` = Kachelbild, `src` = Vollbild, `format: "breit"` für die große Kachel |
+| `grundrisse` | Etagen mit Plan-Bild, 360°-Punkten (`pins`) und `weitere` (Szenen ohne Punkt) |
+| `szenen` | 360°-Bilder (`bild`), Vorschaubild (`vorschau`) und Pfeile (`verbindungen`) |
 | `rundgang` | Start-Szene, automatische Drehung |
 | `energie` | Energieausweis-Block unter den Daten |
 | `lage` | Lagetext, Entfernungen, optional Karte (OpenStreetMap) |
@@ -38,8 +38,8 @@ daraus auf – es reicht, die Datei zu speichern und die Seite neu zu laden.
 
 | Ordner | Inhalt | Empfehlung |
 | --- | --- | --- |
-| `assets/images/` | normale Fotos | JPG, längste Kante 2000–2400 px, Qualität ~80 |
-| `assets/panoramas/` | 360°-Bilder | equirektangular (Seitenverhältnis exakt 2:1), 4096–8192 px breit, JPG |
+| `assets/images/` | Fotos | JPG 1800 px breit plus `-klein.jpg` mit 800 px für die Kacheln |
+| `assets/panoramas/` | 360°-Bilder | equirektangular (2:1), 5120 px breit, JPG ~2–3 MB; dazu `-vorschau.jpg` mit 1024 px |
 | `assets/floorplans/` | Grundrisse | JPG/PNG, ca. 1500–2500 px breit, möglichst ohne Rand |
 
 360°-Bilder breiter als 8192 px laden auf vielen Handys nicht.
