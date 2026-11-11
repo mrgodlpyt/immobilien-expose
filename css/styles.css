@@ -305,7 +305,7 @@ h1, h2 { color: var(--accent); }
 
 .tour__map {
   position: absolute; left: var(--gutter); bottom: 24px; z-index: 3;
-  width: min(280px, 36vw); background: #fff; color: var(--text);
+  width: min(340px, 38vw); background: #fff; color: var(--text);
   padding: 10px; border: 1px solid var(--line); border-radius: var(--radius);
 }
 .tour__map-head { display: flex; justify-content: space-between; padding: 0 2px 8px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
