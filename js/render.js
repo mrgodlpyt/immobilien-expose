@@ -2,7 +2,7 @@
 window.Expose = window.Expose || {};
 
 (function () {
-  const { esc, euro, pad, $ } = Expose.util;
+  const { esc, euro, pad, $, bild } = Expose.util;
 
   function hero(P) {
     const img = P.heroBild || {};
@@ -12,7 +12,7 @@ window.Expose = window.Expose || {};
     return `
       <div class="wrap">
         <figure class="hero__media">
-          <img src="${esc(img.src)}" alt="${esc(img.alt || "")}" fetchpriority="high">
+          <img src="${esc(bild(img.src))}" alt="${esc(img.alt || "")}" fetchpriority="high">
           <figcaption class="caption">
             <span>${esc(img.bildunterschrift || "")}</span>
             <span>${esc(a.plz || "")} ${esc(a.ort || "")}</span>
@@ -81,7 +81,7 @@ window.Expose = window.Expose || {};
       <figure class="${g.format === "breit" ? "is-breit" : ""}"
               data-index="${i}" tabindex="0" role="button"
               aria-label="Bild ${i + 1} vergrößern: ${esc(g.titel || "")}">
-        <div class="img"><img src="${esc(g.klein || g.src)}" alt="${esc(g.titel || "")}" loading="lazy" decoding="async"></div>
+        <div class="img"><img src="${esc(bild(g.klein || g.src))}" alt="${esc(g.titel || "")}" loading="lazy" decoding="async"></div>
         <figcaption class="caption"><span class="n">${pad(i + 1)}</span><span>${esc(g.titel || "")}</span></figcaption>
       </figure>`).join("");
   }

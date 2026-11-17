@@ -40,9 +40,13 @@ sips -Z 800 -s format jpeg -s formatOptions 74 assets/images/NAME.jpg --out asse
 
 `develop` liest die Insta360-DNGs selbst (unkomprimiertes lineares 16-Bit-RGB) und umgeht damit den
 RAW-Konverter von macOS, der bei diesen Dateien die dunklen Tonwerte farblich verfälscht (Gelbstich und
-Farbrauschen nach dem Aufhellen). Weitere Parameter nach Breite und Qualität, alle optional:
-Korrektur in Blendenstufen (0), Zielhelligkeit der hellen Wandflächen (0.50), Sättigung (0.85),
-Mindesthelligkeit der Bildmitte (0.06), Stärke der Rauschminderung (0.6; 1 = kräftig, 0 = aus).
+Farbrauschen nach dem Aufhellen). Danach: entrauschen, Tonwerte zusammenschieben, Weißabgleich örtlich
+nachführen (Lampen- und Mischlicht), Detailkontrast, leichte S-Kurve, Nachschärfen.
+Weitere Parameter nach Breite und Qualität, alle optional: Korrektur in Blendenstufen (0),
+Zielhelligkeit der hellen Wandflächen (0.60), Sättigung (0.90), Mindesthelligkeit der Bildmitte (0.09),
+Stärke der Rauschminderung (0.6; 1 = kräftig, 0 = aus), Stärke des nachgeführten Weißabgleichs
+(0.8; 0 = nur Kamerawert, 1 = Wände ganz neutral).
+Nach einem Bildtausch `bildVersion` in `content/property.js` ändern, sonst zeigen Browser alte Bilder.
 `recompress` wird dafür nicht mehr gebraucht.
 
 Ausrichtung im Grundriss: mit `yawgrid` das Panorama mit Skala erzeugen, die yaw-Werte von zwei bis sechs

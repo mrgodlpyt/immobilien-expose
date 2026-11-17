@@ -13,10 +13,16 @@
 //  5. Tonwerte: großflächige Helligkeit zusammenschieben (Schatten hoch, Fenster runter),
 //     Details bleiben; Lichter laufen weich aus.
 //
-// Aufruf: develop <in.dng> <out.jpg> <maxBreite> <qualität 0..1> [biasEV=0] [wandHell=0.50] [sättigung=0.85] [mitteHell=0.06] [rausch=0.6]
+//  6. Weißabgleich nachführen: Die Kamera legt einen Weißpunkt für das ganze Bild fest; Räume mit
+//     Lampenlicht oder Mischlicht (Lampe + Fenster) bleiben damit gelblich/rosa. Aus den hellen,
+//     wenig farbigen Flächen (Wände, Decken) wird örtlich die Lichtfarbe geschätzt und herausgerechnet.
+//  7. Bildwirkung: Detailkontrast, leichte S-Kurve, Nachschärfen.
+//
+// Aufruf: develop <in.dng> <out.jpg> <maxBreite> <qualität 0..1> [biasEV=0] [wandHell=0.60] [sättigung=0.90] [mitteHell=0.09] [rausch=0.6] [weiss=0.8]
 //   wandHell:  Zielhelligkeit (linear) der hellen Flächen (90. Perzentil, meist die Wände)
 //   mitteHell: Mindesthelligkeit (linear) des mittleren Bildbereichs nach dem Anheben
 //   rausch:    Stärke der Rauschminderung (0.6 = Standard, 1 = kräftig, 0 = aus)
+//   weiss:     Stärke des nachgeführten Weißabgleichs (0 = nur Kamerawert, 1 = Wände ganz neutral)
 import Foundation
 import CoreImage
 import CoreGraphics
@@ -24,14 +30,18 @@ import ImageIO
 import UniformTypeIdentifiers
 
 let a = CommandLine.arguments
-guard a.count >= 5 else { print("usage: develop in out maxW q [biasEV] [wandHell] [sat] [mitteHell] [rausch]"); exit(2) }
+guard a.count >= 5 else { print("usage: develop in out maxW q [biasEV] [wandHell] [sat] [mitteHell] [rausch] [weiss]"); exit(2) }
 let inURL = URL(fileURLWithPath: a[1]), outURL = URL(fileURLWithPath: a[2])
 let maxW = Double(a[3])!, quality = Double(a[4])!
 let biasEV = Float(a.count > 5 ? Double(a[5])! : 0)
-let anchorOut = Float(a.count > 6 ? Double(a[6])! : 0.50)
-let satBase = Float(a.count > 7 ? Double(a[7])! : 0.85)
-let medOut = Float(a.count > 8 ? Double(a[8])! : 0.06)
+let anchorOut = Float(a.count > 6 ? Double(a[6])! : 0.60)
+let satBase = Float(a.count > 7 ? Double(a[7])! : 0.90)
+let medOut = Float(a.count > 8 ? Double(a[8])! : 0.09)
 let nrStrength = Float(a.count > 9 ? Double(a[9])! : 0.6)
+let wbStrength = Float(a.count > 10 ? Double(a[10])! : 0.8)
+let detailGain: Float = 1.2        // Kontrast der Details gegenüber der großflächigen Helligkeit
+let sharpen: Float = 0.5           // Nachschärfen (nur wo das Detail über dem Rauschen liegt)
+let sCurve: Float = 0.22           // leichte S-Kurve für mehr Tiefe
 let maxLift: Float = 5.0
 let t0 = Date()
 func lap(_ s: String) { FileHandle.standardError.write(String(format: "  [%.1fs] %@\n", Date().timeIntervalSince(t0), s).data(using: .utf8)!) }
@@ -338,8 +348,8 @@ let sorted = baseLow.sorted()
 func pct(_ p: Double) -> Float { sorted[min(sorted.count - 1, Int(Double(sorted.count) * p))] }
 let bMed = pct(0.5), bHi = pct(0.99), bA = pct(0.90)
 let TA = log2f(anchorOut) + biasEV
-var cS = (TA - (log2f(medOut) + biasEV)) / max(bA - bMed, 0.5); cS = min(max(cS, 0.45), 0.95)
-var cH = (log2f(0.93) - TA) / max(bHi - bA, 0.3); cH = min(max(cH, 0.3), 1.0)
+var cS = (TA - (log2f(medOut) + biasEV)) / max(bA - bMed, 0.5); cS = min(max(cS, 0.45), 0.85)
+var cH = (log2f(0.93) - TA) / max(bHi - bA, 0.3); cH = min(max(cH, 0.22), 1.0)
 print(String(format: "Basis log2: p50 %.2f  p90 %.2f  p99 %.2f  -> Anker %+.2f EV, Schatten x%.2f, Lichter x%.2f", bMed, bA, bHi, TA - bA, cS, cH))
 @inline(__always) func bilin(_ g: [Float], _ fx: Float, _ fy: Float) -> Float {
   let x0f = floorf(fx), y0f = floorf(fy); let tx = fx - x0f, ty = fy - y0f
@@ -347,6 +357,69 @@ print(String(format: "Basis log2: p50 %.2f  p90 %.2f  p99 %.2f  -> Anker %+.2f E
   let y0 = min(max(Int(y0f), 0), lh - 1), y1 = min(max(Int(y0f) + 1, 0), lh - 1)
   return (g[y0 * lw + x0] * (1 - tx) + g[y0 * lw + x1] * tx) * (1 - ty) + (g[y1 * lw + x0] * (1 - tx) + g[y1 * lw + x1] * tx) * ty
 }
+
+// ---------- Weißabgleich örtlich nachführen ----------
+// Raster wie die Tonwert-Basis. Je Zelle die Farbe als log(R/G), log(B/G); Stützstellen sind helle,
+// wenig farbige Flächen. Erst ein Gesamtwert, dann ein weich verlaufendes Feld darum herum.
+// Wärmere Flächen als die Schätzung zählen weniger als kühlere: so wird eher zu wenig als zu viel
+// korrigiert (weiße Flächen sollen nicht bläulich werden, Holz und Beige nicht als „Licht“ gelten).
+var gainR = [Float](repeating: 1, count: lw * lh), gainB = gainR
+if wbStrength > 0 {
+  let nl = lw * lh
+  var cp = [Float](repeating: 0, count: nl), cq = cp, cw = cp
+  let bLo = pct(0.25), bMid = pct(0.55)
+  for ly in 0..<lh { for lx in 0..<lw {
+    var sy: Float = 0, su: Float = 0, sv: Float = 0
+    for yy in 0..<ds { let row = (ly * ds + yy) * w + lx * ds; for xx in 0..<ds { sy += Yd[row + xx]; su += Cu[row + xx]; sv += Cv[row + xx] } }
+    if sy <= 0 { continue }
+    let rr = 1 + su / sy, rb = 1 + sv / sy
+    let rg = (1 - 0.2126 * rr - 0.0722 * rb) / 0.7152
+    if rr < 0.05 || rg < 0.05 || rb < 0.05 { continue }
+    let c = ly * lw + lx, b = baseLow[c]
+    cp[c] = logf(rr / rg); cq[c] = logf(rb / rg)
+    let lat = cosf(((Float(ly) + 0.5) / Float(lh) - 0.5) * .pi)        // Flächenanteil auf der Kugel
+    cw[c] = smooth(bLo, bMid, b) * (1 - 0.85 * smooth(bA + 1.2, bA + 2.2, b)) * max(lat, 0.05)
+  } }
+  var gp: Float = 0, gq: Float = 0
+  for it in 0..<4 {
+    let sg: Float = it == 0 ? 0.45 : 0.30
+    var sw: Double = 0, sp: Double = 0, sq: Double = 0
+    for c in 0..<nl where cw[c] > 0 {
+      let dp = cp[c] - gp, dq = cq[c] - gq
+      let k = Double(cw[c] * expf(-(dp * dp + dq * dq) / (sg * sg)))
+      sw += k; sp += k * Double(cp[c]); sq += k * Double(cq[c])
+    }
+    if sw > 0 { gp = Float(sp / sw); gq = Float(sq / sw) }
+  }
+  let rW = max(6, lw / 14)
+  var fp = [Float](repeating: gp, count: nl), fq = [Float](repeating: gq, count: nl)
+  for _ in 0..<2 {
+    var a0 = [Float](repeating: 0, count: nl), a1 = a0, a2 = a0
+    for c in 0..<nl where cw[c] > 0 {
+      let dp = cp[c] - fp[c], dq = cq[c] - fq[c]
+      let sg: Float = (dp - dq) > 0 ? 0.20 : 0.30
+      let k = cw[c] * expf(-(dp * dp + dq * dq) / (sg * sg))
+      a0[c] = k; a1[c] = k * cp[c]; a2[c] = k * cq[c]
+    }
+    a0 = boxL(boxL(a0, rW), rW); a1 = boxL(boxL(a1, rW), rW); a2 = boxL(boxL(a2, rW), rW)
+    let reg: Float = 0.01                                              // wenig Stützstellen -> Gesamtwert
+    for c in 0..<nl { fp[c] = (a1[c] + reg * gp) / (a0[c] + reg); fq[c] = (a2[c] + reg * gq) / (a0[c] + reg) }
+  }
+  var mnP: Float = 9, mxP: Float = -9, mnQ: Float = 9, mxQ: Float = -9
+  for c in 0..<nl {
+    let pp = min(max(fp[c], -0.6), 0.6), qq = min(max(fq[c], -0.6), 0.6)
+    mnP = min(mnP, pp); mxP = max(mxP, pp); mnQ = min(mnQ, qq); mxQ = max(mxQ, qq)
+    // Kühles Licht (Schatten unter blauem Himmel) nur knapp zur Hälfte ausgleichen: draußen stimmt der
+    // Kamerawert, und der Himmel soll blau bleiben. Warmes Lampenlicht wird voll ausgeglichen.
+    let k = wbStrength * (1 - 0.55 * smooth(0.0, 0.25, qq - pp))
+    gainR[c] = expf(-k * pp); gainB[c] = expf(-k * qq)
+  }
+  print(String(format: "Weißabgleich: Lichtfarbe gesamt R/G %+.2f B/G %+.2f (log), örtlich R/G %+.2f…%+.2f, B/G %+.2f…%+.2f", gp, gq, mnP, mxP, mnQ, mxQ))
+}
+lap("Weißabgleich")
+
+// ---------- Nachschärfen vorbereiten ----------
+let Yblur = sharpen > 0 ? box(Yd, 2) : []
 
 // ---------- Farbsäume: Umgebung sehr heller Flächen (Fenster, Gegenlicht) ----------
 // Die Insta360-Linsen zeichnen um überstrahlte Flächen violette Säume und Schleier. In deren Nähe
@@ -378,20 +451,29 @@ for y in 0..<h {
     let fxL = (Float(x) + 0.5) / Float(ds) - 0.5
     let base = bilin(ma, fxL, fyL) * L + bilin(mb, fxL, fyL)
     let d = base - bA
-    var Lo = TA + (d >= 0 ? cH : cS) * d + (L - base)
+    var Lo = TA + (d >= 0 ? cH : cS) * d + detailGain * (L - base)
+    if sharpen > 0 {
+      let e = Yd[i] - Yblur[i]
+      let gate = smooth(0.4 * s0, 1.6 * s0, abs(e))
+      let t = log2f(max(Yd[i], 1e-6) / max(Yblur[i], 1e-6))
+      Lo += sharpen * gate * min(max(t, -0.35), 0.35)
+    }
     Lo = min(Lo, L + maxLift)
     let lift = Lo - L
     sumLift += Double(lift)
     var Yt = exp2f(Lo)
     if Yt > knee { Yt = knee + (1 - knee) * (1 - expf(-(Yt - knee) / (1 - knee))) }
+    if sCurve > 0 { var g = powf(Yt, 1 / 2.2); g += sCurve * (g * g * (3 - 2 * g) - g); Yt = powf(g, 2.2) }
     if Yt > 0.985 { white += 1 }
 
     // Farbe: Verhältnis zur Helligkeit; wo das Signal im Rauschen liegt -> neutral
     let rel = smooth(1.0, 5.0, yl / max(s0, 1e-7))            // 0 = im Rauschen, 1 = verlässlich
-    var rr = 1 + (Cu[i] / yl) * rel, rb = 1 + (Cv[i] / yl) * rel
+    var rr = 1 + Cu[i] / yl, rb = 1 + Cv[i] / yl
     var rg = (1 - 0.2126 * rr - 0.0722 * rb) / 0.7152
+    rr *= bilin(gainR, fxL, fyL); rb *= bilin(gainB, fxL, fyL)       // nachgeführter Weißabgleich
     let hk = smooth(0.02, 0.2, halo[i])
-    if hk > 0 { let mn = min(rr, rb); if rg < mn { rg += 0.9 * hk * (mn - rg) } }
+    if hk > 0 { let mn = min(rr, rb); if rg < mn { rg += hk * (mn - rg) } }
+    rr = 1 + (rr - 1) * rel; rg = 1 + (rg - 1) * rel; rb = 1 + (rb - 1) * rel
     rr = max(rr, 0.02); rg = max(rg, 0.02); rb = max(rb, 0.02)
     let s = satBase * (1 - 0.30 * smooth(2.0, 5.0, lift)) * (1 - 0.70 * smooth(0.55, 1.0, Yt))
     rr = powf(rr, s); rg = powf(rg, s); rb = powf(rb, s)

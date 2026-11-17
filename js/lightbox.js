@@ -2,18 +2,18 @@
 window.Expose = window.Expose || {};
 
 (function () {
-  const { $, $$, esc, pad } = Expose.util;
+  const { $, $$, esc, pad, bild } = Expose.util;
   let items = [], index = 0, lastFocus = null;
   let box, img, cap, counter;
 
   function show(i) {
     index = (i + items.length) % items.length;
     const it = items[index];
-    img.src = it.src; img.alt = it.titel || "";
+    img.src = bild(it.src); img.alt = it.titel || "";
     cap.textContent = `${pad(index + 1)} — ${it.titel || ""}`;
     counter.textContent = `${index + 1} / ${items.length}`;
     // nächstes Bild vorladen
-    const n = new Image(); n.src = items[(index + 1) % items.length].src;
+    const n = new Image(); n.src = bild(items[(index + 1) % items.length].src);
   }
   function open(i) {
     lastFocus = document.activeElement;

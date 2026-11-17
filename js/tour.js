@@ -5,7 +5,7 @@
 window.Expose = window.Expose || {};
 
 (function () {
-  const { $, $$, esc, floorOfScene, floorGroupOfScene, orderedScenes } = Expose.util;
+  const { $, $$, esc, floorOfScene, floorGroupOfScene, orderedScenes, bild } = Expose.util;
   let P, overlay, viewer = null, current = null, raf = null, lastFocus = null, hintTimer = null;
   let mapFloorId = null;
 
@@ -14,8 +14,8 @@ window.Expose = window.Expose || {};
     for (const [id, s] of Object.entries(P.szenen || {})) {
       scenes[id] = {
         type: "equirectangular",
-        panorama: s.bild,
-        preview: s.vorschau || undefined,
+        panorama: bild(s.bild),
+        preview: s.vorschau ? bild(s.vorschau) : undefined,
         yaw: s.yaw || 0,
         pitch: s.pitch || 0,
         hfov: s.hfov || 100,

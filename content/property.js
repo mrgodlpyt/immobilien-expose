@@ -12,6 +12,10 @@
 
 window.PROPERTY = {
 
+  // Stand der Bilder. Nach jedem Austausch von Bilddateien ändern (z. B. Datum + Buchstabe),
+  // damit Browser die neuen Dateien laden und nicht alte aus ihrem Zwischenspeicher zeigen.
+  bildVersion: "2026-11-17b",
+
   // ------------------------------------------------------------------
   // 1. GRUNDDATEN
   // ------------------------------------------------------------------

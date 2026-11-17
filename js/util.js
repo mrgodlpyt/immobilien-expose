@@ -14,6 +14,13 @@ Expose.util = {
     return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n);
   },
   pad(n) { return String(n).padStart(2, "0"); },
+  // Bildadresse mit Versionsstempel (PROPERTY.bildVersion), damit ausgetauschte Bilder
+  // nicht aus dem Zwischenspeicher des Browsers kommen
+  bild(src) {
+    const v = (window.PROPERTY || {}).bildVersion;
+    if (!src || !v || /^(https?:|data:)/.test(src)) return src;
+    return src + (src.includes("?") ? "&" : "?") + "v=" + encodeURIComponent(v);
+  },
   $(sel, root) { return (root || document).querySelector(sel); },
   $$(sel, root) { return Array.from((root || document).querySelectorAll(sel)); },
   // Kurze Einblendung unten (z. B. im Pin-Modus)
