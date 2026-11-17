@@ -9,7 +9,7 @@ swiftc -O tools/brighten.swift -o /tmp/brighten
 
 | Werkzeug | Zweck | Aufruf |
 | --- | --- | --- |
-| `alle-bilder.sh` | alles neu erzeugen: Panoramen, Vorschauen, Galeriefotos, Titelbild | `tools/alle-bilder.sh "<DNG-Ordner>"` |
+| `alle-bilder.sh` | alles neu erzeugen: Panoramen, Vorschauen, Galeriefotos, Titelbild | `tools/alle-bilder.sh` |
 | `develop.swift` | DNG direkt lesen, entrauschen, Schatten anheben, Fensterlichter schützen (lokale Tonwertkompression) | `develop in.dng out.jpg 5120 0.80` |
 | `recompress.swift` | Rauschminderung + stärkere JPEG-Kompression für fertige JPEGs (nur Sonderfälle) | `recompress in.jpg out.jpg 0.66 0.05 0.35` |
 | `reframe.swift` | Kugelbild (2:1) → perspektivische Ansicht für Galeriefotos | `reframe pano.jpg foto.jpg <yaw> <pitch> <hfov> 1800 1200 0.8` |
@@ -19,13 +19,22 @@ swiftc -O tools/brighten.swift -o /tmp/brighten
 | `contact.swift` | Kontaktabzug mehrerer Bilder zur Sichtkontrolle | `contact blatt.jpg 4 420 bild1.jpg bild2.jpg …` |
 | `brighten.swift` | einfache Aufhellung eines JPEGs (nur für Sonderfälle, frisst Lichter aus) | `brighten in.jpg out.jpg 0.5 0.4 0` |
 
-Alle Bilder neu erzeugen (Stick mit den DNGs anschließen; nach „Kopieren fertig“ kann er wieder ab):
+Alle Bilder neu erzeugen. Die 21 Panorama-DNGs liegen als Kopie neben dem Repo in
+`../immobilien-expose-quellen/dng` (3,5 GB, nicht im Git, Dateiname = Aufnahmezeit); ohne Angabe
+nimmt das Skript diesen Ordner und liest die Dateien direkt:
+
+```bash
+tools/alle-bilder.sh
+```
+
+Fehlt die Kopie (anderer Rechner), geht es auch vom Stick; nach „Kopieren fertig“ kann er wieder ab:
 
 ```bash
 tools/alle-bilder.sh "/Volumes/MARKUS NAU/Ben Bilder Raumbach"
 ```
 
-Einzelne Aufnahmen: Aufnahmezeiten anhängen, z. B. `tools/alle-bilder.sh "<Ordner>" /tmp/expose-bilder 130043 131302`.
+Einzelne Aufnahmen: Aufnahmezeiten anhängen, z. B. `tools/alle-bilder.sh "" /tmp/expose-bilder 130043 131302`
+(`""` = gesicherte Kopie; der zweite Wert ist der Arbeitsordner für die übersetzten Werkzeuge).
 Nur Vorschauen, Galeriefotos und Titelbild aus den vorhandenen Panoramen: `tools/alle-bilder.sh -`.
 Eine neue Aufnahme bekommt im Skript eine Zeile `Aufnahme:yaw:pitch:Bildwinkel` für ihr Galeriefoto.
 
